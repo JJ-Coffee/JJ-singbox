@@ -37,7 +37,7 @@ jobs:
           git clone https://github.com/qjebbs/sing-box sing-box.bak
           cd sing-box.bak
           COMMIT=$(git log --pretty=format:"%h-%s"|grep provider|awk -F "-" '{print $1}')
-          cd ../sing-box
+          cd ../JJ-singbox
           git checkout dev
           git remote add qjebbs https://github.com/qjebbs/sing-box
           git fetch qjebbs
