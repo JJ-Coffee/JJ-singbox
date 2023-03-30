@@ -29,23 +29,6 @@ jobs:
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
-      - name: Add proxy providers
-        run: |
-          git config --global user.email "akuntrial042@gmail.com"
-          git config --global user.name "JJ-Coffee"
-          cd ..
-          git clone https://github.com/qjebbs/sing-box sing-box.bak
-          cd sing-box.bak
-          COMMIT=$(git log --pretty=format:"%h-%s"|grep provider|awk -F "-" '{print $1}')
-          cd ../JJ-singbox
-          git checkout dev
-          git remote add qjebbs https://github.com/qjebbs/sing-box
-          git fetch qjebbs
-          git cherry-pick $COMMIT || true
-          #git add mkdocs.yml
-          #git -c core.editor=true cherry-pick --continue
-          #sed -i "s/outbound := range r.outbounds/outbound := range r.outbounds.All()/g" route/router.go
-          sed -i "s/v.TLSAllowInsecure/true/g" common/link/vmess.go
       - name: Get latest go version
         id: version
         run: |
@@ -81,23 +64,6 @@ jobs:
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
-      - name: Add proxy providers
-        run: |
-          git config --global user.email "akuntrial042@gmail.com"
-          git config --global user.name "JJ-Coffee"
-          cd ..
-          git clone https://github.com/qjebbs/sing-box sing-box.bak
-          cd sing-box.bak
-          COMMIT=$(git log --pretty=format:"%h-%s"|grep provider|awk -F "-" '{print $1}')
-          cd ../JJ-singbox
-          git checkout dev
-          git remote add qjebbs https://github.com/qjebbs/sing-box
-          git fetch qjebbs
-          git cherry-pick $COMMIT || true
-          #git add mkdocs.yml
-          #git -c core.editor=true cherry-pick --continue
-          #sed -i "s/outbound := range r.outbounds/outbound := range r.outbounds.All()/g" route/router.go
-          sed -i "s/v.TLSAllowInsecure/true/g" common/link/vmess.go
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
@@ -240,23 +206,6 @@ jobs:
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
-      - name: Add proxy providers
-        run: |
-          git config --global user.email "akuntrial042@gmail.com"
-          git config --global user.name "JJ-Coffee"
-          cd ..
-          git clone https://github.com/qjebbs/sing-box sing-box.bak
-          cd sing-box.bak
-          COMMIT=$(git log --pretty=format:"%h-%s"|grep provider|awk -F "-" '{print $1}')
-          cd ../JJ-singbox
-          git checkout dev
-          git remote add qjebbs https://github.com/qjebbs/sing-box
-          git fetch qjebbs
-          git cherry-pick $COMMIT || true
-          #git add mkdocs.yml
-          #git -c core.editor=true cherry-pick --continue
-          #sed -i "s/outbound := range r.outbounds/outbound := range r.outbounds.All()/g" route/router.go
-          sed -i "s/v.TLSAllowInsecure/true/g" common/link/vmess.go
       - name: Get latest go version
         id: version
         run: |
