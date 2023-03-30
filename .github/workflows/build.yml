@@ -89,7 +89,7 @@ jobs:
           git clone https://github.com/qjebbs/sing-box sing-box.bak
           cd sing-box.bak
           COMMIT=$(git log --pretty=format:"%h-%s"|grep provider|awk -F "-" '{print $1}')
-          cd ../sing-box
+          cd ../JJ-singbox
           git checkout dev
           git remote add qjebbs https://github.com/qjebbs/sing-box
           git fetch qjebbs
@@ -229,7 +229,7 @@ jobs:
       GOARM: ${{ matrix.goarm }}
       GOMIPS: ${{ matrix.gomips }}
       CGO_ENABLED: 0
-      TAGS: with_gvisor,with_quic,with_wireguard,with_clash_api,with_acme
+      TAGS: with_conntrack,with_clash_api,with_gvisor,with_quic,with_grpc,with_utls,with_dhcp,with_wireguard,with_shadowsocksr
     steps:
       - name: Set variables
         run: |
@@ -248,7 +248,7 @@ jobs:
           git clone https://github.com/qjebbs/sing-box sing-box.bak
           cd sing-box.bak
           COMMIT=$(git log --pretty=format:"%h-%s"|grep provider|awk -F "-" '{print $1}')
-          cd ../sing-box
+          cd ../JJ-singbox
           git checkout dev
           git remote add qjebbs https://github.com/qjebbs/sing-box
           git fetch qjebbs
