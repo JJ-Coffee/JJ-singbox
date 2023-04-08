@@ -5,15 +5,12 @@ on:
     inputs:
       branch:
         type: choice
-        description: "Select Branch or tag"
+        description: Select Branch or tag
         required: true
-        default: "dev-next"
+        default: dev-next
         options:
         - main-next
         - dev-next
-
-env:
-      REPO_BRANCH: ${{ github.event.inputs.branch }}
 
 jobs:
   build:
@@ -33,7 +30,7 @@ jobs:
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
-          ref: $REPO_BRANCH
+          ref: ${{ github.event.inputs.branch }}
       - name: Get latest go version
         id: version
         run: |
@@ -69,7 +66,7 @@ jobs:
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
-          ref: $REPO_BRANCH
+          ref: ${{ github.event.inputs.branch }}
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
@@ -212,7 +209,7 @@ jobs:
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
-          ref: $REPO_BRANCH
+          ref: ${{ github.event.inputs.branch }}
       - name: Get latest go version
         id: version
         run: |
