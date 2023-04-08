@@ -1,15 +1,10 @@
-name: build sing-box with proxy providers
+name: build sing-box
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * *"
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+  inputs:
+      tag:
+        description: "The tag/branch version you want to build"
 
 jobs:
   build:
@@ -29,7 +24,7 @@ jobs:
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
-          ref: v1.2.3
+          ref: ${{ github.event.inputs.tag }}
       - name: Get latest go version
         id: version
         run: |
@@ -65,7 +60,7 @@ jobs:
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
-          ref: v1.2.3
+          ref: ${{ github.event.inputs.tag }}
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
@@ -208,7 +203,7 @@ jobs:
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
-          ref: v1.2.3
+          ref: ${{ github.event.inputs.tag }}
       - name: Get latest go version
         id: version
         run: |
