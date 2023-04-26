@@ -9,8 +9,9 @@ on:
         required: true
         default: dev-next
         options:
-        - main-next
         - dev-next
+        - main
+        - main-next
 
 jobs:
   build:
