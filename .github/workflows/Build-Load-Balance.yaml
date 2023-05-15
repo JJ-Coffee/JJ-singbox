@@ -1,0 +1,112 @@
+name: build sing-box load-balance
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        type: choice
+        description: Select Branch or tag
+        required: true
+        default: dev-next
+        options:
+        - dev-next
+
+jobs:
+  build:
+    name: Debug build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel previous
+        uses: styfle/cancel-workflow-action@0.7.0
+        with:
+          access_token: ${{ github.token }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          repository: qjebbs/sing-box
+          ref: ${{ github.event.inputs.branch }}
+      - name: Get latest go version
+        id: version
+        run: |
+          echo ::set-output name=go_version::$(curl -s https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep -oE '"version": "[0-9]{1}.[0-9]{1,}(.[0-9]{1,})?"' | head -1 | cut -d':' -f2 | sed 's/ //g; s/"//g')
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ steps.version.outputs.go_version }}
+      - name: Add cache to Go proxy
+        run: |
+          version=`git rev-parse HEAD`
+          mkdir build
+          pushd build
+          go mod init build
+          go get -v github.com/sagernet/sing-box@$version
+          popd
+        continue-on-error: true
+      - name: Run Test
+        run: |
+          go test -v ./...
+  build_go118:
+    name: Debug build (Go 1.18)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          repository: qjebbs/sing-box
+          ref: ${{ github.event.inputs.branch }}
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.18.10
+      - name: Cache go module
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/go/pkg/mod
+          key: go118-${{ hashFiles('**/go.sum') }}
+      - name: Run Test
+        run: make
+  cross:
+    strategy:
+      matrix:
+        include:
+          # linux
+          - name: linux-arm64
+            goos: linux
+            goarch: arm64
+
+      fail-fast: false
+    runs-on: ubuntu-latest
+    env:
+      GOOS: ${{ matrix.goos }}
+      GOARCH: ${{ matrix.goarch }}
+      GOAMD64: ${{ matrix.goamd64 }}
+      GOARM: ${{ matrix.goarm }}
+      GOMIPS: ${{ matrix.gomips }}
+      CGO_ENABLED: 0
+      TAGS: with_clash_api,with_gvisor,with_quic,with_grpc,with_utls
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          repository: qjebbs/sing-box
+          ref: ${{ github.event.inputs.branch }}
+      - name: Get latest go version
+        id: version
+        run: |
+          echo ::set-output name=go_version::$(curl -s https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep -oE '"version": "[0-9]{1}.[0-9]{1,}(.[0-9]{1,})?"' | head -1 | cut -d':' -f2 | sed 's/ //g; s/"//g')
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ steps.version.outputs.go_version }}
+      - name: Build
+        id: build
+        run: make
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sing-box-${{ matrix.name }}
+          path: sing-box*
