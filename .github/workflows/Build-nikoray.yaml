@@ -15,7 +15,7 @@ jobs:
   build-go:
     strategy:
       matrix:
-        cross_os: [ linux ]
+        cross_os: [ android ]
         cross_arch: [ arm64 ]
         include:
           - cross_os: public_res
