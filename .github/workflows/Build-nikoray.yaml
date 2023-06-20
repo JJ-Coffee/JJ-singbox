@@ -15,7 +15,7 @@ jobs:
   build-go:
     strategy:
       matrix:
-        cross_os: [ android ]
+        cross_os: [ linux ]
         cross_arch: [ arm64 ]
         include:
           - cross_os: public_res
@@ -29,11 +29,6 @@ jobs:
           fetch-depth: 0
           repository: MatsuriDayo/nekoray
           ref: ${{ github.event.inputs.branch }}
-      - name: Build
-        run: |
-          export GOOS=android
-          export GOARCH=amr64
-          ./libs/build_go.sh
       - name: Go Status
         run: git ls-files go | xargs cat | sha1sum > go_status
       - name: Cache Common Download
