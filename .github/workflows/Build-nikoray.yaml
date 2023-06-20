@@ -3,29 +3,20 @@ name: build sing-box nikoray
 on:
   workflow_dispatch:
     inputs:
-      g_os:
+      branch:
         type: choice
-        description: Select goos or tag
+        description: Select Branch or tag
         required: true
-        default: linux
+        default: main
         options:
-        - linux
-        - android
-      g_arc:
-        type: choice
-        description: Select goarch or tag
-        required: true
-        default: arm64
-        options:
-        - arm64
-        - armv7
+        - main
 
 jobs:
   build-go:
     strategy:
       matrix:
-        cross_os: [ "${{ github.event.inputs.g_os }}" ]
-        cross_arch: [ "${{ github.event.inputs.g.arch }}" ]
+        cross_os: [ linux ]
+        cross_arch: [ arm64 ]
         include:
           - cross_os: public_res
             cross_arch: public_res
@@ -37,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
           repository: MatsuriDayo/nekoray
-          ref: main
+          ref: ${{ github.event.inputs.branch }}
       - name: Go Status
         run: git ls-files go | xargs cat | sha1sum > go_status
       - name: Cache Common Download
