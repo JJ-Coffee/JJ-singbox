@@ -9,16 +9,16 @@ on:
         required: true
         default: linux
         options:
-        - linux
-        - android
+        - [ linux ]
+        - [ android ]
       g_arc:
         type: choice
         description: Select goarch or tag
         required: true
         default: arm64
         options:
-        - arm64
-        - armv7
+        - [ arm64 ]
+        - [ armv7 ]
 
 jobs:
   build-go:
