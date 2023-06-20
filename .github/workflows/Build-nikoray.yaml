@@ -15,7 +15,7 @@ jobs:
   build-go:
     strategy:
       matrix:
-        cross_os: [ linux ]
+        cross_os: [ android ]
         cross_arch: [ arm64 ]
         include:
           - cross_os: public_res
@@ -33,9 +33,9 @@ jobs:
 
         run: |
 
-          echo "export GOOS=linux" >> $GITHUB_ENV
+          echo "export GOOS=android" >> $GITHUB_ENV
 
-          echo "export GOARCH=amd64" >> $GITHUB_ENV
+          echo "export GOARCH=arm64" >> $GITHUB_ENV
       - name: Go Status
         run: git ls-files go | xargs cat | sha1sum > go_status
       - name: Cache Common Download
