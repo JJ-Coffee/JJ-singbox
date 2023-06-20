@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         cross_os: [ ${{{ github.event.inputs.go_os }} ]
-        cross_arch: [ ${{{ github.event.inputs.goarch }} ]
+        cross_arch: [ arm64 ]
         include:
           - cross_os: public_res
             cross_arch: public_res
