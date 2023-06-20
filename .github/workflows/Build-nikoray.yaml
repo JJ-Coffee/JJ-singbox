@@ -29,6 +29,13 @@ jobs:
           fetch-depth: 0
           repository: MatsuriDayo/nekoray
           ref: ${{ github.event.inputs.branch }}
+      - name: Set environment variables
+
+        run: |
+
+          echo "export GOOS=linux" >> $GITHUB_ENV
+
+          echo "export GOARCH=amd64" >> $GITHUB_ENV
       - name: Go Status
         run: git ls-files go | xargs cat | sha1sum > go_status
       - name: Cache Common Download
