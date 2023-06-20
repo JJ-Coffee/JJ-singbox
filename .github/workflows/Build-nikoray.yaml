@@ -35,7 +35,7 @@ jobs:
         with:
           go-version: ${{ steps.version.outputs.go_version }}
       - name: build
-        run: 
+        run: |
           cd nikoray
           bash libs/get_source.sh
 
