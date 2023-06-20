@@ -3,7 +3,7 @@ name: build sing-box nikoray
 on:
   workflow_dispatch:
     inputs:
-      os:
+      go_os:
         type: choice
         description: Select goos
         required: true
@@ -15,7 +15,7 @@ jobs:
   build-go:
     strategy:
       matrix:
-        cross_os: [ ${{{ github.event.inputs.os }} ]
+        cross_os: [ ${{{ github.event.inputs.go_os }} ]
         cross_arch: [ ${{{ github.event.inputs.goarch }} ]
         include:
           - cross_os: public_res
