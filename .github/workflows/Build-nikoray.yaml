@@ -11,15 +11,6 @@ on:
         options:
         - linux
         - android
-      goarch:
-        type: choice
-        description: Select goarch
-        required: true
-        default: arm64
-        options:
-        - arm64
-        - armv7
-
 jobs:
   build-go:
     strategy:
