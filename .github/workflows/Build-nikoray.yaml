@@ -9,23 +9,23 @@ on:
         required: true
         default: linux
         options:
-        - [ linux ]
-        - [ android ]
+        - linux
+        - android
       g_arc:
         type: choice
         description: Select goarch or tag
         required: true
         default: arm64
         options:
-        - [ arm64 ]
-        - [ armv7 ]
+        - arm64
+        - armv7
 
 jobs:
   build-go:
     strategy:
       matrix:
-        cross_os: ${{ github.event.inputs.g_os }}
-        cross_arch: ${{ github.event.inputs.g.arch }}
+        cross_os: ["${{ github.event.inputs.g_os }}"]
+        cross_arch: ["${{ github.event.inputs.g.arch }}"]
         include:
           - cross_os: public_res
             cross_arch: public_res
