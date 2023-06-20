@@ -1,16 +1,16 @@
-name: build sing-box nikoray
+ name: build sing-box nikoray
 
 on:
   workflow_dispatch:
     inputs:
-      go_os:
+      branch:
         type: choice
-        description: Select goos
+        description: Select Branch or tag
         required: true
-        default: linux
+        default: main
         options:
-        - linux
-        - android
+        - main
+
 jobs:
   build-go:
     strategy:
@@ -28,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
           repository: MatsuriDayo/nekoray
-          ref: main
+          ref: ${{ github.event.inputs.branch }}
       - name: Go Status
         run: git ls-files go | xargs cat | sha1sum > go_status
       - name: Cache Common Download
