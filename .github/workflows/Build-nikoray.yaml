@@ -15,7 +15,7 @@ jobs:
   build-go:
     strategy:
       matrix:
-        cross_os: [ ${{{ github.event.inputs.go_os }} ]
+        cross_os: [ linux ]
         cross_arch: [ arm64 ]
         include:
           - cross_os: public_res
