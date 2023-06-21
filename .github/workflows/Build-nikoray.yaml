@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          repository: MatsuriDayo/nekoray
+          repository: JJ-Coffee/nekoray
           ref: ${{ github.event.inputs.branch }}
       - name: Go Status
         run: git ls-files go | xargs cat | sha1sum > go_status
