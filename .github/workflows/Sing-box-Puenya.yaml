@@ -1,0 +1,132 @@
+name: build sing-box puernya
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        type: choice
+        description: Select Branch or tag
+        required: true
+        default: dev-next
+        options:
+        - dev-next
+        - main
+        - main-next
+
+jobs:
+  build:
+    name: Debug build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        with:
+          fetch-depth: 0
+          repository: PuerNya/sing-box
+          ref: ${{ github.event.inputs.branch }}
+      - name: Get latest go version
+        id: version
+        run: |
+          echo go_version=$(curl -s https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep -oE '"version": "[0-9]{1}.[0-9]{1,}(.[0-9]{1,})?"' | head -1 | cut -d':' -f2 | sed 's/ //g; s/"//g') >> $GITHUB_OUTPUT
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ steps.version.outputs.go_version }}
+      - name: Add cache to Go proxy
+        run: |
+          version=`git rev-parse HEAD`
+          mkdir build
+          pushd build
+          go mod init build
+          go get -v github.com/sagernet/sing-box@$version
+          popd
+        continue-on-error: true
+      - name: Run Test
+        run: |
+          go test -v ./...
+  build_go118:
+    name: Debug build (Go 1.18)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        with:
+          fetch-depth: 0
+          repository: PuerNya/sing-box
+          ref: ${{ github.event.inputs.branch }}
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.18.10
+      - name: Cache go module
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/go/pkg/mod
+          key: go118-${{ hashFiles('**/go.sum') }}
+      - name: Run Test
+        run: make ci_build_go118
+  build_go120:
+    name: Debug build (Go 1.20)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        with:
+          fetch-depth: 0
+          repository: PuerNya/sing-box
+          ref: ${{ github.event.inputs.branch }}
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ^1.21
+      - name: Cache go module
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/go/pkg/mod
+          key: go118-${{ hashFiles('**/go.sum') }}
+      - name: Run Test
+        run: make ci_build
+  cross:
+    strategy:
+      matrix:
+        include:
+          # linux
+          - name: linux-arm64
+            goos: linux
+            goarch: arm64
+
+      fail-fast: false
+    runs-on: ubuntu-latest
+    env:
+      GOOS: ${{ matrix.goos }}
+      GOARCH: ${{ matrix.goarch }}
+      GOAMD64: ${{ matrix.goamd64 }}
+      GOARM: ${{ matrix.goarm }}
+      GOMIPS: ${{ matrix.gomips }}
+      CGO_ENABLED: 0
+      TAGS: with_clash_api,with_gvisor,with_quic,with_grpc,with_utls,with_dhcp,with_wireguard,with_ech
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        with:
+          fetch-depth: 0
+          repository: PuerNya/sing-box
+          ref: ${{ github.event.inputs.branch }}
+      - name: Get latest go version
+        id: version
+        run: |
+          echo go_version=$(curl -s https://raw.githubusercontent.com/actions/go-versions/main/versions-manifest.json | grep -oE '"version": "[0-9]{1}.[0-9]{1,}(.[0-9]{1,})?"' | head -1 | cut -d':' -f2 | sed 's/ //g; s/"//g') >> $GITHUB_OUTPUT
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ steps.version.outputs.go_version }}
+      - name: Build
+        id: build
+        run: make
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sing-box-${{ matrix.name }}
+          path: sing-box*
