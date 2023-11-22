@@ -69,7 +69,7 @@ jobs:
             ~/go/pkg/mod
           key: go118-${{ hashFiles('**/go.sum') }}
       - name: Run Test
-        run: make
+        run: make ci_build_go118
   cross:
     strategy:
       matrix:
