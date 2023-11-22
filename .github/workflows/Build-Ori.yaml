@@ -23,7 +23,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
@@ -63,7 +63,7 @@ jobs:
         with:
           go-version: 1.18.10
       - name: Cache go module
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v3
         with:
           path: |
             ~/go/pkg/mod
@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Setup Go
@@ -111,7 +111,7 @@ jobs:
       TAGS: with_clash_api,with_gvisor,with_quic,with_grpc,with_utls,with_dhcp,with_wireguard,with_reality_server,with_ech
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           repository: SagerNet/sing-box
