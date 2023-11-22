@@ -93,9 +93,9 @@ jobs:
       matrix:
         include:
           # linux
-          #- name: linux-arm64
-          #  goos: linux
-          #  goarch: arm64
+          - name: linux-arm64
+            goos: linux
+            goarch: arm64
           # android
           - name: android-arm64
             goos: android
