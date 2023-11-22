@@ -1,8 +1,17 @@
 name: Build SFA
 
 on:
-  push:
-
+  workflow_dispatch:
+    inputs:
+      branch:
+        type: choice
+        description: Select Branch or tag
+        required: true
+        default: dev-next
+        options:
+        - dev-next
+        - main
+        - main-next
 jobs:
   build:
     runs-on: ubuntu-latest
